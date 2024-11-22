@@ -110,17 +110,22 @@ with tab_horarios:
         turmas_correspondentes[int(i)] for i in st.session_state['index_turmas_posssiveis']['selection']['rows']
     ])
 
-    turmas_possiveis.columns = turmas.columns
-    st.dataframe(turmas_possiveis, use_container_width=True)
+    try:
+        turmas_possiveis.columns = turmas.columns
+        #st.dataframe(turmas_possiveis, use_container_width=True)
 
-    turmas_possiveis["HORÁRIOS"] = turmas_possiveis.apply(combinar_horarios, axis=1)
-    turmas_possiveis.drop(columns=['HORÁRIOS.semanal', 'HORÁRIOS.quinzenal I', 'HORÁRIOS.quinzenal II'], inplace=True)
-    st.dataframe(turmas_possiveis, use_container_width=True)
+        turmas_possiveis["HORÁRIOS"] = turmas_possiveis.apply(combinar_horarios, axis=1)
+        turmas_possiveis.drop(columns=['HORÁRIOS.semanal', 'HORÁRIOS.quinzenal I', 'HORÁRIOS.quinzenal II'], inplace=True)
+        #st.dataframe(turmas_possiveis, use_container_width=True)
 
-    lista_dfs = [grupo.reset_index(drop=True) for _, grupo in turmas_possiveis.groupby('DISCIPLINA')]
-    #print(f"{lista_dfs=}")
-    comb_possiveis = gerar_combinacoes_e_testar(lista_dfs)
-    st.write(f"Combinacoes possiveis: {len(comb_possiveis)}")
+        lista_dfs = [grupo.reset_index(drop=True) for _, grupo in turmas_possiveis.groupby('DISCIPLINA')]
+        #print(f"{lista_dfs=}")
+        texto = st.container()
+        comb_possiveis = gerar_combinacoes_e_testar(lista_dfs)
+        texto.write(f"Combinacoes possiveis: {len(comb_possiveis)}")
+
+    except Exception as e:
+        st.error(e)
 
     # Gera todas as combinações possíveis de turmas
     #for combo in combinations(turmas_possiveis.to_dict('records'), 2):  # Ajuste para 2 turmas
