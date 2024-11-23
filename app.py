@@ -51,7 +51,7 @@ def combinar_horarios(row):
 
     return horarios
 
-
+@st.cache_data
 def eh_compativel(d1: dict, d2: dict) -> bool:
     for h1 in d1['HORÁRIOS']:
         for h2 in d2['HORÁRIOS']:
